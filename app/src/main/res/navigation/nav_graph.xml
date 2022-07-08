@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/listDisplay">
+    <fragment
+        android:id="@+id/listDisplay"
+        android:name="com.example.expensetracker.ListDisplay"
+        android:label="fragment_list_display"
+        tools:layout="@layout/fragment_list_display" >
+        <action
+            android:id="@+id/action_listDisplay_to_addEdit"
+            app:destination="@id/addEdit" />
+    </fragment>
+    <fragment
+        android:id="@+id/addEdit"
+        android:name="com.example.expensetracker.AddEdit"
+        android:label="fragment_add_edit"
+        tools:layout="@layout/fragment_add_edit" >
+        <action
+            android:id="@+id/action_addEdit_to_listDisplay"
+            app:destination="@id/listDisplay"
+            app:popUpTo="@id/listDisplay"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>
