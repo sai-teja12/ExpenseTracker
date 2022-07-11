@@ -1,61 +1,63 @@
 package com.example.expensetracker
 
 import android.os.Bundle
-import android.view.*
-import android.view.View.inflate
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.FragmentListDisplayBinding
 
-
-val expenses = arrayOf(exp("at barber Shop" ,200,"12June"),
-    exp("at Baker",150,"3June"),
-    exp("Petrol",150,"2June"),
-    exp("Bus",450,"4June"),
-    exp("Lunch",200,"3June")
-)
-
-
 class ListDisplay : Fragment() {
-    private var _binding: FragmentListDisplayBinding ? = null
+
+    private val expenses = arrayListOf<Expense>(
+        Expense(1,"at Barber Shop",200,"12June","Needs") ,
+        Expense(2,"Grocery",500,"2June","Needs"),
+        Expense(3,"Bus",150,"9June","Travel"),
+        Expense(4,"Tshirt",600,"10June","Shopping"),
+        Expense(5,"Shirt & Pant",2500,"28June","Shopping")
+    )
+    private var _binding: FragmentListDisplayBinding? = null
     private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val expList  = binding.recyclerView.apply{
-            layoutManager = LinearLayoutManager(this@ListDisplay)
-            adapter = ExpenseAdapter().apply {
-                setHasStableIds(true)
-            }
-            setHasFixedSize(true)
-        }
-
-
         setHasOptionsMenu(true)
-
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentListDisplayBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
-    private lateinit var recyclerView: RecyclerView
+    private var recyclerView: RecyclerView = binding.recyclerView
+
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
+//        binding.addButton.setOnClickListener {
+//
+//            val action = ListDisplayDirections.actionListDisplayToAddEdit(
+//                getString(R.string.)
+//            )
+//            this.findNavController().navigate(action)
+//        }
+//    }
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView = binding.recyclerView
-
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = ExpenseAdapter(expenses)
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
 
 
 }

@@ -1,53 +1,54 @@
 package com.example.expensetracker
 
 import android.content.Context
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.expensetracker.database.expense.Expense
-import java.nio.file.Files.size
 
-class ExpenseAdapter(private val context: Context, private val data : exp): RecyclerView.Adapter<ExpenseAdapter.ExpenseviewHolder>() {
-    var expData = arrayOf<exp>()
-        set (value){
-            field = value
-            notifyDataSetChanged()
-        }
-    class ExpenseviewHolder(private val view : View) : RecyclerView.ViewHolder(view){
-        val expense_title: TextView = view.findViewById(R.id.expense_title)
-        val expense :TextView= view.findViewById(R.id.expense)
-        val whn : TextView = view.findViewById(R.id.`when`)
-        val button: Button = view.findViewById(R.id.add_button)
+
+class ExpenseAdapter(private var expenses : ArrayList<Expense>) :RecyclerView.Adapter<ExpenseAdapter.ExpenseHolder>() {
+
+    class ExpenseHolder(view: View): RecyclerView.ViewHolder(view){
+        val title: TextView = view.findViewById(R.id.expense_title)
+        val exp:TextView = view.findViewById(R.id.expense)
+        val `when`:TextView = view.findViewById(R.id.`when`)
+        val category:TextView= view.findViewById(R.id.category)
+        val edit_Button : Button = view.findViewById(R.id.edit_button)
+        val deleteButton:Button = view.findViewById(R.id.delete_button)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseviewHolder {
-        val adapterLayout  = LayoutInflater.from(parent.context).inflate(R.layout.expense_view,parent,false)
-        return  ExpenseviewHolder(adapterLayout)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseHolder {
+        val view : View = LayoutInflater.from(parent.context).inflate(R.layout.expense_view,parent,false)
+        return ExpenseHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ExpenseviewHolder, position: Int) {
-        with(holder){
-            expense_title.text = expData[position].expense_title
-            expense.setText(expData[position].expense)
-            whn.text = expData[position].`when`
+    override fun onBindViewHolder(holder: ExpenseHolder, position: Int) {
+         val expense : Expense = expenses[position]
+        holder.title.text = expense.expenseTitle
+        holder.exp.setText( expense.expense)
+        holder.`when`.text = expense.`when`
+        holder.category.text = expense.category
+
+        holder.edit_Button.setOnClickListener {
+            //goto edit page
 
         }
-        holder.button.setOnClickListener {
-
-//            val action = ListDisplayDirections.action_listDisplay_to_addEdit()
-//            // Navigate using that action
-//            holder.view.findNavController().navigate(action)
+        holder.deleteButton.setOnClickListener{
+            //dlt from DB
         }
-        //have implemented
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
-        return expData.size
+        return expenses.size
     }
+
+    fun setData(expenses: List<Expense>){
+        this.expenses = expenses as ArrayList<Expense>
+        notifyDataSetChanged()
+    }
+
 }
